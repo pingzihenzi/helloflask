@@ -14,6 +14,7 @@ except ImportError:
 from jinja2 import escape
 from jinja2.utils import generate_lorem_ipsum
 from flask import Flask, make_response, request, redirect, url_for, abort, session, jsonify
+from flask import json
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'secret string')
@@ -147,24 +148,29 @@ def fine():
     # <P>From:huangcheng</P>
     # <P>Heading:Reminder</P>
     # <P><strong>Body:do not forget the party</strong></P>'''
-    res = '''<?xml version="1.0" encoding="UTF-8"?>
-<note>
-    <to>Jone</to>
-    <from>Peter</from>
-    <heading>Reminder</heading>
-    <body>dont forget the party!</body>
-</note>'''
-    tas = '''<?xml version="1.0" encoding="UTF-8"?>
-<note>
-  <to>Peter</to>
-  <from>Jane</from>
-  <heading>Reminder</heading>
-  <body>Don't forget the party!</body>
-</note>'''
-    response = make_response(res)
-    response.mimetype = 'application/xml'
+#     res = '''<?xml version="1.0" encoding="UTF-8"?>
+# <note>
+#     <to>Jone</to>
+#     <from>Peter</from>
+#     <heading>Reminder</heading>
+#     <body>dont forget the party!</body>
+# </note>'''
+    res = {
+        "note":{
+            "to":"Jone",
+            "from":"huang",
+            "heading":"Reminder",
+            "body":"dont forget the party!",
+        }
+    }
+    response = make_response(json.dumps(res))
+    # response = make_response(res)
+    # response.mimetype = 'application/json'
     # response.headers['content-type'] = 'application/xml;charset=utf-8'
-    return response
+    # return response
+    # return jsonify({"name":"huangcheng","age":12})
+    # return jsonify(message="error"), 500
+    return jsonify(name="huangcheng",age=12)
 
 
 # set cookie

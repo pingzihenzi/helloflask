@@ -35,4 +35,5 @@ HelloFlask 的 Meta 仓库，包含 HelloFlask 相关文档和示例程序。
 ## 学习笔记
 
 - 如果使用text/xml，xml内容中的version只能是1.0或1.1，因为1.1使用的不多，常用的version是1.0
+- pipenv shell进入虚拟环境，flask run启动服务
 
