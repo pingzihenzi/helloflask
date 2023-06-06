@@ -31,3 +31,8 @@ HelloFlask 的 Meta 仓库，包含 HelloFlask 相关文档和示例程序。
 - [《Flask Web 开发实战》示例程序索引](https://docs.helloflask.com/examples/)
 - [《Flask Web 开发实战》勘误](https://docs.helloflask.com/book/1/errata/)
 - [《Flask Web 开发实战（第 2 版）》代码片段](https://docs.helloflask.com/book/4/snippets/)
+
+## 学习笔记
+
+- 如果使用text/xml，xml内容中的version只能是1.0或1.1，因为1.1使用的不多，常用的version是1.0
+

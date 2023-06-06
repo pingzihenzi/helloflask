@@ -35,6 +35,15 @@ def hello():
     return response
 
 
+@app.route('/say')
+def say():
+    # name = request.args.get('name','default name')
+    # response = '''
+    # <h1>hello, %s!</h1>
+    # ''' % name
+    return "response", 302
+
+
 # redirect
 @app.route('/hi')
 def hi():
@@ -44,13 +53,18 @@ def hi():
 # use int URL converter
 @app.route('/goback/<int:year>')
 def go_back(year):
-    return 'Welcome to %d!' % (2018 - year)
+    return 'Welcome to %d!' % (2023 - year)
 
 
 # use any URL converter
 @app.route('/colors/<any(blue, white, red):color>')
 def three_colors(color):
     return '<p>Love is patient and kind. Love is not jealous or boastful or proud or rude.</p>'
+
+
+@app.route('/firstname/<any(huang,chen):firstname>')
+def show_name(firstname):
+    return '<h1>first name is:%s</h1>' % firstname
 
 
 # return error response
@@ -125,6 +139,34 @@ body: Don't forget the party!
     return response
 
 
+@app.route('/fine')
+def fine():
+    # res = '''<h1>hello response</h1>
+    # <p>Note:Jone</p>
+    # <P>To:Peter</P>
+    # <P>From:huangcheng</P>
+    # <P>Heading:Reminder</P>
+    # <P><strong>Body:do not forget the party</strong></P>'''
+    res = '''<?xml version="1.0" encoding="UTF-8"?>
+<note>
+    <to>Jone</to>
+    <from>Peter</from>
+    <heading>Reminder</heading>
+    <body>dont forget the party!</body>
+</note>'''
+    tas = '''<?xml version="1.0" encoding="UTF-8"?>
+<note>
+  <to>Peter</to>
+  <from>Jane</from>
+  <heading>Reminder</heading>
+  <body>Don't forget the party!</body>
+</note>'''
+    response = make_response(res)
+    response.mimetype = 'application/xml'
+    # response.headers['content-type'] = 'application/xml;charset=utf-8'
+    return response
+
+
 # set cookie
 @app.route('/set/<name>')
 def set_cookie(name):
@@ -194,7 +236,7 @@ def foo():
 
 @app.route('/bar')
 def bar():
-    return '<h1>Bar page</h1><a href="%s">Do something and redirect</a>' \
+    return '<h1>Bar page</h1><a href="%s">Do something and redirect1</a>' \
            % url_for('do_something', next=request.full_path)
 
 
@@ -208,7 +250,7 @@ def is_safe_url(target):
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ('http', 'https') and \
-           ref_url.netloc == test_url.netloc
+        ref_url.netloc == test_url.netloc
 
 
 def redirect_back(default='hello', **kwargs):
