@@ -15,9 +15,11 @@ from jinja2 import escape
 from jinja2.utils import generate_lorem_ipsum
 from flask import Flask, make_response, request, redirect, url_for, abort, session, jsonify
 from flask import json
+import datetime
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'secret string')
+app.permanent_session_lifetime = int((os.getenv('SESSION_LIFETIME',60)))
 
 
 # get name value from query string and cookie
@@ -38,11 +40,10 @@ def hello():
 
 @app.route('/say')
 def say():
-    # name = request.args.get('name','default name')
-    # response = '''
-    # <h1>hello, %s!</h1>
-    # ''' % name
-    return "response", 302
+    # res = os.getenv('SECRET_KEY')
+    # res = os.getenv('SESSION_LIFETIME')
+    res = request.full_path
+    return res
 
 
 # redirect
@@ -249,7 +250,8 @@ def bar():
 @app.route('/do-something')
 def do_something():
     # do something here
-    return redirect_back()
+    # return redirect_back()
+    return redirect(url_for('hello'))
 
 
 def is_safe_url(target):
@@ -266,3 +268,72 @@ def redirect_back(default='hello', **kwargs):
         if is_safe_url(target):
             return redirect(target)
     return redirect(url_for(default, **kwargs))
+
+@app.route('/helloo/<content_type>',defaults={'content_type':'json'})
+def helloo(content_type):
+    name = request.args.get('name','default name')
+    head_type = content_type.lower()
+    if head_type == 'text':
+        res_text = '''
+    <h1>welcome to my page</h1>
+    <p>hello %s</p>
+    <p>redirect page</p>
+    '''% name
+        response = make_response(res_text)
+        response.mimetype = 'text/plain'
+        return response
+    elif head_type == 'xml':
+        res_xml = '''<?xml version="1.0" encoding="UTF-8"?>
+    <note>
+    <page>xml page</page>
+    <name>%s</name>
+    </note>'''% name
+        response = make_response(res_xml)
+        response.mimetype = 'text/xml'
+        return response
+    elif head_type == 'html':
+        res_html = '''
+    <h1>welcome to my page</h1>
+    <p>hello %s</p>
+    <p>redirect page</p>
+    '''% name
+        response = make_response(res_html)
+        response.mimetype = 'text/html'
+        return response
+    elif head_type == 'json':
+        res_json = {
+            "node":{
+                'page name':'json page',
+                'name':f'{name}',
+                'headtype':'application/json',
+                'last':'success',
+            }
+        }
+        response = make_response(json.dumps(res_json))
+        response.mimetype = 'application/json'
+        return response
+    else:
+        abort(500)
+
+@app.route('/loggin')
+def loggin():
+    session['status']=True
+    session.permanent = True
+    
+    return redirect(url_for('helloo'))
+
+@app.route('/adminn')
+def adminn():
+    if "status" in session:
+        if session['status']:
+            return "success"
+        else:
+            return "please login"
+    else:
+        abort(500)
+
+@app.route('/loggout')
+def loggout():
+    if 'status' in session:
+        session.pop('status')
+    return "logout"

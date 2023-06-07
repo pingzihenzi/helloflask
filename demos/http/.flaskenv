@@ -1,1 +1,3 @@
 FLASK_ENV=development
+SECRET_KEY=huangcheng123456
+SESSION_LIFETIME=20
