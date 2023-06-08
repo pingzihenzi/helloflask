@@ -11,6 +11,7 @@ try:
 except ImportError:
     from urllib.parse import urlparse, urljoin
 
+import logging
 from jinja2 import escape
 from jinja2.utils import generate_lorem_ipsum
 from flask import Flask, make_response, request, redirect, url_for, abort, session, jsonify
@@ -42,8 +43,15 @@ def hello():
 def say():
     # res = os.getenv('SECRET_KEY')
     # res = os.getenv('SESSION_LIFETIME')
-    res = request.full_path
-    return res
+    res = request.referrer
+    # logging.debug(request.full_path)
+    # return redirect(request.referrer or url_for('hello'))
+    host = urlparse(urljoin(request.host_url,request.full_path))
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url,request.full_path))
+    if test_url.scheme in ('http','https') and ref_url.netloc == test_url.netloc:
+        return "success"
+    return str(host)
 
 
 # redirect
@@ -238,7 +246,7 @@ def load_post():
 @app.route('/foo')
 def foo():
     return '<h1>Foo page</h1><a href="%s">Do something and redirect</a>' \
-           % url_for('do_something', next=request.full_path)
+           % url_for('do_something',xiayige=None)
 
 
 @app.route('/bar')
@@ -250,8 +258,9 @@ def bar():
 @app.route('/do-something')
 def do_something():
     # do something here
-    # return redirect_back()
-    return redirect(url_for('hello'))
+    return redirect_back()
+    # return redirect(url_for('hello'))
+    # return redirect(request.args.get('xiayige',url_for('hello')))
 
 
 def is_safe_url(target):
@@ -264,6 +273,7 @@ def is_safe_url(target):
 def redirect_back(default='hello', **kwargs):
     for target in request.args.get('next'), request.referrer:
         if not target:
+            # logging.info(target+"********")
             continue
         if is_safe_url(target):
             return redirect(target)
@@ -337,3 +347,15 @@ def loggout():
     if 'status' in session:
         session.pop('status')
     return "logout"
+
+@app.route('/fooo')
+def fooo():
+    html_text = '''
+    <h1>welcome fooo</h1>
+    <a href='%s'>redirect url </a>
+    ''' % url_for('loggin')
+    return html_text
+
+@app.route('/partline')
+def partline():
+    return 
