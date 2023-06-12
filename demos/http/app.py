@@ -43,7 +43,6 @@ def hello():
 def say():
     # res = os.getenv('SECRET_KEY')
     # res = os.getenv('SESSION_LIFETIME')
-    res = request.referrer
     # logging.debug(request.full_path)
     # return redirect(request.referrer or url_for('hello'))
     host = urlparse(urljoin(request.host_url,request.full_path))
@@ -52,6 +51,21 @@ def say():
     if test_url.scheme in ('http','https') and ref_url.netloc == test_url.netloc:
         return "success"
     return str(host)
+
+@app.route('/check')
+def check():
+    name = request.args.get('name')
+    response = '''
+    <h1>welcome to my page!</h1>
+    <p>\'这是单引号\'</p>
+    <p>Hello! %s</p>
+    <a href="javascript:alert('alllllert!!');">website</a>
+    <img src="123" onerror="alert('image erorr!!!')">
+    '''% escape(name)
+    return response
+
+# <script>windows.location.href="http://attacker.com";</script>
+
 
 
 # redirect

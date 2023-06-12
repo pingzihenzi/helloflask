@@ -36,4 +36,7 @@ HelloFlask 的 Meta 仓库，包含 HelloFlask 相关文档和示例程序。
 
 - 如果使用text/xml，xml内容中的version只能是1.0或1.1，因为1.1使用的不多，常用的version是1.0
 - pipenv shell进入虚拟环境，flask run启动服务
+- routes中带参数时，给出默认值使用defaults={"key":"value"}方式
+- 开放重定向漏洞，校验url的netloc是否相同，协议是否相同
+- jinja2的escape()方法可以将输入内容转义成文本，防止XSS注入攻击
 
