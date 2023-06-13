@@ -13,6 +13,11 @@ app.secret_key = os.getenv('SECRET_KEY', 'secret string')
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 
+
+def say():
+    return "i am a say"
+app.add_template_global(say,name='hi') ## 方法名，自定义名称hi用于其他视图函数调用，或者是template中调用
+
 user = {
     'username': 'Grey Li',
     'bio': 'A boy who loves movies and music.',
@@ -45,8 +50,13 @@ def index():
 # register template context handler
 @app.context_processor
 def inject_info():
-    foo = 'I am foo.'
-    return dict(foo=foo)  # equal to: return {'foo': foo}
+    foolish = 'I am lier.'
+    return dict(foo=foolish)  # equal to: return {'foo': foo}
+
+@app.context_processor
+def test_info():
+    text = 'this is a text'
+    return dict(test=text)
 
 
 # register template global function
