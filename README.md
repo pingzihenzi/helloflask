@@ -39,4 +39,4 @@ HelloFlask 的 Meta 仓库，包含 HelloFlask 相关文档和示例程序。
 - routes中带参数时，给出默认值使用defaults={"key":"value"}方式
 - 开放重定向漏洞，校验url的netloc是否相同，协议是否相同
 - jinja2的escape()方法可以将输入内容转义成文本，防止XSS注入攻击
-
+- 局部模板通常以下划线开头

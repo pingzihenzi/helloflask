@@ -7,10 +7,18 @@
 <ul>
     <li><a href="{{ url_for('watchlist') }}">Watchlist</a></li>
     <li>Filter: {{ foo|musical }}</li>
+    <li>Global: {{ hell }}</li>
+    <li>Global: {{ hell|title }}</li>
+    <li>Global: {{ sayhi()|title}}</li>
+    <li>Global: {{ sayhi() }}</li>
     <li>Global: {{ bar() }}</li>
     <li>Global: {{ hi() }}</li>
+    <li>test1: {{test1()}} </li>
+    <li>test2: {{test2}}</li>
+    <li>filters: {{ foo|smiling }} </li>
+    <li>StarNumbers: {{ numbers }}</li>
     <li>Test: {% if name is baz %}I am baz.{% endif %}</li>
-    <li>Macro: {{ qux(amount=1) }}</li>
+    <li>Macro: {{ qux(amount=0) }}</li>
     <li><a href="{{ url_for('watchlist_with_static') }}">Watchlist with image and styles.</a></li>
     <li><a href="{{ url_for('just_flash') }}">Flash something</a></li>
 </ul>

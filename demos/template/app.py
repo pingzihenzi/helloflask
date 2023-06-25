@@ -53,16 +53,36 @@ def inject_info():
     foolish = 'I am lier.'
     return dict(foo=foolish)  # equal to: return {'foo': foo}
 
-@app.context_processor
+# @app.context_processor
 def test_info():
     text = 'this is a text'
-    return dict(test=text)
+    return dict(hell=text)
+app.context_processor(test_info)
+
+@app.context_processor
+def range_num():
+    star_numbers = range(1,100)
+    return dict(numbers=star_numbers)
 
 
 # register template global function
 @app.template_global()
 def bar():
     return 'I am bar.'
+
+# @app.template_global
+def sayhi():
+    return "none"
+app.add_template_global(sayhi,name='sayhi')
+
+@app.route('/test')
+def test():
+    return render_template('test.html')
+
+@app.route('/wi')
+def wi():
+    text = Markup('<h1>hello wi</h1>')
+    return render_template('index.html',text=text)
 
 
 # register template filter
@@ -77,6 +97,17 @@ def baz(n):
     if n == 'baz':
         return True
     return False
+
+def test1():
+    return "this is test1"
+app.jinja_env.globals['test1'] = test1
+
+test2 = 'im test2'
+app.jinja_env.globals['test2'] = test2
+
+def smiling(s):
+    return s + ':-)'
+app.jinja_env.filters['smiling'] = smiling
 
 
 @app.route('/watchlist2')
