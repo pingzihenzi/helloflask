@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        {% block head %}
+        <title>
+            {% block title %}
+            My project title
+            {% endblock %}
+        </title>
+        <link rel="icon" href="{{url_for('static',filename='favicon.ico')}}">
+        {% block styles %}
+        <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+        {% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <li>
+                    <a href="https://www.baidu.com">Baidu</a>
+                </li>
+                <li>
+                    <a href="https://www.facebook.com">Facebook</a>
+                </li>
+            </ul>
+        </nav>
+        <main>
+            {% block content %}
+            <p>please fill the content with your own informations</p>
+            {% endblock %}
+        </main>
+    </body>
+    <footer>
+        <small>
+            &copy; <a href="https://www.github.com">Asce.git</a> <a href="https://www.baidu.com">About me</a>
+        </small>
+    </footer>
+    {% block script %}
+    {% endblock %}
+</html>

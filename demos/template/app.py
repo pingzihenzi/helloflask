@@ -46,6 +46,10 @@ def watchlist():
 def index():
     return render_template('index.html')
 
+@app.route('/layout')
+def layout():
+    return render_template('mylayout.html')
+
 
 # register template context handler
 @app.context_processor
@@ -118,7 +122,8 @@ def watchlist_with_static():
 # message flashing
 @app.route('/flash')
 def just_flash():
-    flash('I am flash, who is looking for me?')
+    # flash('I am flash, who is looking for me?')
+    flash(u'我是一个闪电消息！')
     return redirect(url_for('index'))
 
 

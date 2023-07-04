@@ -4,8 +4,20 @@
 <title>My new title</title>
 {% endblock %}
 
+{% block styles %}
+{{super()}}
+<style>
+    p {
+        color: red;
+    }
+</style>
+{% endblock %}
+
 {% block lines %}
 <p>
     this is a page
 </p>
+<div>
+    <img src="{{url_for('static',filename='ledi.jpg')}}" alt="default.jpg" width="50">
+</div>
 {% endblock %}

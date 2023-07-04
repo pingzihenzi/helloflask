@@ -20,3 +20,13 @@
         <link rel="icon" href="{{ filename_or_url }}">
     {%- endif %}
 {% endmacro %}
+
+{% macro select(num=2) %}
+    {% if num == 1 %}
+        Number is 1.
+    {% elif num > 1 %}
+        Number > 1.
+    {% elif num < 1 %}
+        Number < 1.
+    {% endif %}
+{% endmacro %}

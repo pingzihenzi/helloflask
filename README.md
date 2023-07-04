@@ -40,3 +40,4 @@ HelloFlask 的 Meta 仓库，包含 HelloFlask 相关文档和示例程序。
 - 开放重定向漏洞，校验url的netloc是否相同，协议是否相同
 - jinja2的escape()方法可以将输入内容转义成文本，防止XSS注入攻击
 - 局部模板通常以下划线开头
+- 子模板的第一个标签必须是extends
