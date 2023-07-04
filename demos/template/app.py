@@ -123,14 +123,18 @@ def watchlist_with_static():
 @app.route('/flash')
 def just_flash():
     # flash('I am flash, who is looking for me?')
-    flash(u'我是一个闪电消息！')
+    flash('我是一个闪电消息！')
     return redirect(url_for('index'))
 
 
 # 404 error handler
+# @app.errorhandler(404)
+# def page_not_found(e):
+#     return render_template('errors/404.html'), 404
+
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('errors/404.html'), 404
+    return render_template('errors/my404.html'),404
 
 
 # 500 error handler
