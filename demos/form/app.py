@@ -7,7 +7,9 @@
 """
 import os
 import uuid
+import logging
 
+from logging import Logger
 from flask import Flask, render_template, flash, redirect, url_for, request, send_from_directory, session
 from flask_ckeditor import CKEditor, upload_success, upload_fail
 from flask_dropzone import Dropzone
@@ -32,7 +34,7 @@ app.config['ALLOWED_EXTENSIONS'] = ['png', 'jpg', 'jpeg', 'gif']
 
 # Flask config
 # set request body's max length
-# app.config['MAX_CONTENT_LENGTH'] = 3 * 1024 * 1024  # 3Mb
+app.config['MAX_CONTENT_LENGTH'] = 3 * 1024 * 1024  # 3Mb
 
 # Flask-CKEditor config
 app.config['CKEDITOR_SERVE_LOCAL'] = True
@@ -57,7 +59,10 @@ def html():
     form = LoginForm()
     if request.method == 'POST':
         username = request.form.get('username')
-        flash('Welcome home, %s!' % username)
+        # job = request.form.get('job')
+        # habbit = request.form.get('habbit')
+        flash('Welcome home %s!' % username)
+        # flash('Welcome home %s!, your job is %s, your habbit is %s' %(username,job,habbit))
         return redirect(url_for('index'))
     return render_template('pure_html.html')
 
@@ -89,6 +94,10 @@ def custom_validator():
         flash('Bingo!')
         return redirect(url_for('index'))
     return render_template('custom_validator.html', form=form)
+
+@app.route('/uploadmy', methods=['GET','POST'])
+def my_upload():
+    return render_template('/test/uploadtest.html')
 
 
 @app.route('/uploads/<path:filename>')

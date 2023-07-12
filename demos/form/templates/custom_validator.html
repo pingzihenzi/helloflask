@@ -6,7 +6,8 @@
 
 <form method="post">
     {{ form.csrf_token }}
-    {{ form_field(form.answer) }}
+    {{ form_field(form.answer) }}<br>
+    {{ form_field(form.name) }}<br>
     {{ form.submit }}<br>
 </form>
 {% endblock %}
