@@ -4,16 +4,16 @@ import re  # 正则表达式，进行文字匹配`
 import urllib.request
 import urllib.error  # 制定URL，获取网页数据
 import xlwt  # 进行excel操作
-# import sqlite3 # 进行SQLite数据库操作
+import sqlite3  # 进行SQLite数据库操作
 # 创建正则表达式对象
-findLink = re.compile(r'<a href="(.*?)">')  #影片详情链接
-findImgSrc = re.compile(r'<img.*src="(.*?)"', re.S) #影片封面图片
-findTitle = re.compile(r'<span class="title">(.*)</span>') #影片名称
+findLink = re.compile(r'<a href="(.*?)">')  # 影片详情链接
+findImgSrc = re.compile(r'<img.*src="(.*?)"', re.S)  # 影片封面图片
+findTitle = re.compile(r'<span class="title">(.*)</span>')  # 影片名称
 findOtitle = re.compile(r'<span class="other">(.*)</span>')
 findRating = re.compile(
-    r'<span class="rating_num" property="v:average">(.*)</span>') #影片评分
-findJudge = re.compile(r'<span>(\d*)人评价</span>') #影片评价人数
-findInq = re.compile(r'<span class="inq">(.*)</span>') #影片inq
+    r'<span class="rating_num" property="v:average">(.*)</span>')  # 影片评分
+findJudge = re.compile(r'<span>(\d*)人评价</span>')  # 影片评价人数
+findInq = re.compile(r'<span class="inq">(.*)</span>')  # 影片inq
 findBd = re.compile(r'<p class="">(.*?)</p>', re.S)
 
 
@@ -24,7 +24,7 @@ def main():
     savepath = "豆瓣电影Top250.xls"  # 当前目录新建XLS，存储进去
     # dbpath = "movie.db" #当前目录新建数据库，存储进去
     # 3.保存数据
-    saveData(datalist, savepath)  # 2种存储方式可以只选择一种
+    # saveData(datalist, savepath)  # 2种存储方式可以只选择一种
     # saveData2DB(datalist,dbpath)
     # 爬取网页
 
@@ -37,6 +37,8 @@ def getData(baseurl):
         # 2.逐一解析数据
         soup = BeautifulSoup(html, "html.parser")
         for item in soup.find_all('div', class_="item"):  # 查找符合要求的字符串
+            print(item)
+            break
             data = []  # 保存一部电影所有信息
             item = str(item)
             link = re.findall(findLink, item)[0]  # 通过正则表达式查找
@@ -61,14 +63,14 @@ def getData(baseurl):
                 inq = inq[0].replace("。", "")
                 data.append(inq)
             else:
-                data.append("无详细数据")
+                data.append("无inq数据")
             bd = re.findall(findBd, item)[0]
-            if len(bd) !=0:
+            if len(bd) != 0:
                 bd = re.sub('<br(\s+)?/>(\s+)?', "", bd)
                 bd = re.sub('/', "", bd)
                 data.append(bd.strip())
             else:
-                data.append('无详细数据')
+                data.append('无bd数据')
             datalist.append(data)
     return datalist
     # 得到指定一个URL的网页内容
@@ -106,6 +108,44 @@ def saveData(datalist, savepath):
         for j in range(0, 8):
             sheet.write(i+1, j, data[j])  # 数据
             book.save(savepath)  # 保存
+
+
+# def saveData2DB(datalist, dbpath):
+#     init_db(dbpath)
+#     conn = sqlite3.connect(dbpath)
+#     cur = conn.cursor()
+#     for data in datalist:
+#         for index in range(len(data)):
+#             if index == 4 or index == 5:
+#                 continue
+#             data[index] = '"'+data[index]+'"'
+#             sql = '''
+#             insert into movie250(
+#             info_link,pic_link,cname,ename,score,rated,instroduction,info)
+#             values (%s)''' % ",".join(data)
+#     # print(sql) #输出查询语句，用来测试
+#     cur.execute(sql)
+#     conn.commit()
+#     cur.close
+#     conn.close()
+
+#     def init_db(dbpath):
+#         sql = '''
+#         create table movie250(
+#         id integer primary key autoincrement,
+#         info_link text,
+#         pic_link text,
+#         cname varchar,
+#         ename varchar ,
+#         score numeric,
+#         rated numeric,
+#         instroduction text,
+#         info text
+#         )'''  # 创建数据表
+#         cursor = conn.cursor()
+#         cursor.execute(sql)
+#         conn.commit()
+#         # 保存数据到数据库
 
 
 if __name__ == "__main__":  # 当程序执行时
