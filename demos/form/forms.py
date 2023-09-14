@@ -34,6 +34,15 @@ def name_check(message=None):
             raise ValidationError(message)
     return _name_check
 
+def name_eck(message=None):
+    if message is None:
+        message = 'Please input you name between 1 and 15 characters!'
+    
+    def _name_check(form,field):
+        if len(field.data) > 15:
+            raise ValidationError(message)
+    return _name_check
+
 
 # 4.2.1 basic form example
 class LoginForm(FlaskForm):
@@ -120,5 +129,6 @@ class RegisterForm2(FlaskForm):
 # CKEditor Form
 class RichTextForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(1, 50)])
+    name = StringField('Name',validators=[name_eck()])
     body = CKEditorField('Body', validators=[DataRequired()])
     submit = SubmitField('Publish')

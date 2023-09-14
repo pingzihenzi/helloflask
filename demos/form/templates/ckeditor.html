@@ -7,6 +7,7 @@
     <form method="post">
         {{ form.csrf_token }}
         {{ form_field(form.title) }}
+        {{ form_field(form.name) }}
         {{ form_field(form.body) }}
         {{ form.submit }}
     </form>

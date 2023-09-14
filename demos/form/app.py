@@ -34,7 +34,7 @@ app.config['ALLOWED_EXTENSIONS'] = ['png', 'jpg', 'jpeg', 'gif']
 
 # Flask config
 # set request body's max length
-app.config['MAX_CONTENT_LENGTH'] = 3 * 1024 * 1024  # 3Mb
+# app.config['MAX_CONTENT_LENGTH'] = 3 * 1024 * 1024  # 3Mb
 
 # Flask-CKEditor config
 app.config['CKEDITOR_SERVE_LOCAL'] = True
@@ -95,11 +95,6 @@ def custom_validator():
         return redirect(url_for('index'))
     return render_template('custom_validator.html', form=form)
 
-@app.route('/uploadmy', methods=['GET','POST'])
-def my_upload():
-    return render_template('/test/uploadtest.html')
-
-
 @app.route('/uploads/<path:filename>')
 def get_file(filename):
     return send_from_directory(app.config['UPLOAD_PATH'], filename)
@@ -120,6 +115,20 @@ def random_filename(filename):
     new_filename = uuid.uuid4().hex + ext
     return new_filename
 
+@app.route('/test/uploadmy', methods=['GET','POST'])
+def my_upload():
+    form = UploadForm()
+    if form.validate_on_submit():
+        f = form.photo.data
+        filename = random_filename(f.filename)
+        path = os.path.join(app.config['UPLOAD_PATH'],filename)
+        logging.debug(path)
+        f.save(os.path.join(app.config['UPLOAD_PATH'],filename))
+        flash('upload success!!!')
+        session['filenames'] = [filename]
+        return redirect(url_for('show_images'))
+    return render_template('/test/uploadtest.html', form=form)
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -127,6 +136,8 @@ def upload():
     if form.validate_on_submit():
         f = form.photo.data
         filename = random_filename(f.filename)
+        path = os.path.join(app.config['UPLOAD_PATH'],filename)
+        logging.debug(path)
         f.save(os.path.join(app.config['UPLOAD_PATH'], filename))
         flash('Upload success.')
         session['filenames'] = [filename]
